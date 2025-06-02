@@ -2,3 +2,5 @@ pyspark
 mysql-connector-python
 requests
 pandas
+python-dotenv
+findspark

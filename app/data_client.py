@@ -8,7 +8,7 @@ from pyspark.sql import SparkSession, DataFrame
 from utils.sql import SafeSQL
 
 from config.constants import LOAN_API_URL, SUPPORTED_EXTENSIONS
-from app.transformers import transform
+from utils.transformers import transform
 from utils.logging import path_log
 
 
@@ -19,12 +19,11 @@ class DataClient:
     and MySQL connection.
     """
 
-    def __init__(self, spark: SparkSession, sql: SafeSQL, config: dict):
+    def __init__(self, spark: SparkSession, sql: SafeSQL):
 
         # Save the SparkSession as an attribute
         self.spark = spark
         self.sql = sql
-        self.config = config
 
     # Perform ETL on the json files and endpoint, saving output into MySQL
     def pipeline(self) -> None:
@@ -148,18 +147,15 @@ class DataClient:
     def mysql_write(self, table: str, df: DataFrame) -> None:
 
         try:
-            # First check if the configurations are set
-            if not self.config:
-                path_log("Attempting to write to table without configurations")
 
             # Then write the DataFrame to the specified table
             df.write \
                 .format("jdbc") \
-                .option("url", self.config['jdbc_url']) \
-                .option("driver", self.config["jdbc_driver"]) \
+                .option("url", os.getenv('JDBC_URL')) \
+                .option("driver", os.getenv('JDBC_DRIVER')) \
                 .option("dbtable", table) \
-                .option("user", self.config["user"]) \
-                .option("password", self.config["password"]) \
+                .option("user", os.getenv('MYSQL_USER')) \
+                .option("password", os.getenv('MYSQL_PASSWORD')) \
                 .mode("append") \
                 .save()
 
@@ -171,17 +167,3 @@ class DataClient:
     def stop(self) -> None:
         self.spark.stop()
         self.sql.close()
-
-
-if __name__ == "__main__":
-
-    # Load the config file
-    with open('macconfig.json', 'r') as f:
-        config = json.load(f)
-
-    # Create an EasySpark Session
-    dc = DataClient(
-        app_name="SBA345",
-        log="FATAL",
-        config=config
-    )

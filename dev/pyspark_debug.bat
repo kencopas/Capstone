@@ -13,3 +13,8 @@ echo.
 echo Python Version:
 python --version
 echo.
+
+echo.
+echo Path Variable:
+echo %PATH%
+echo.

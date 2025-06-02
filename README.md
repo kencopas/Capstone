@@ -6,24 +6,24 @@ This Capstone Project is designed to manage an ETL process for a bank dataset. T
 
 ## Repository Structure
 
-* **`app/`**: Contains the main application components (Data Client & CLI).
-* **`config/`**: Holds configuration files and settings.
-* **`data/`**: Includes datasets and data-related resources.
-* **`dev/`**: Development scripts and tools.
-* **`docs/`**: Documentation and related materials.
-* **`lib/`**: Library modules and utilities.
-* **`sql/`**: SQL scripts for database setup and queries.
-* **`utils/`**: Helper functions and utilities.
-* **`main.py`**: The main entry point of the application.
-* **`requirements.txt`**: Lists all Python dependencies.
+- **`app/`**: Contains the main application components (Data Client & CLI).
+- **`config/`**: Holds configuration files and settings.
+- **`data/`**: Includes datasets and data-related resources.
+- **`dev/`**: Development scripts and tools.
+- **`docs/`**: Documentation and related materials.
+- **`lib/`**: Library modules and utilities.
+- **`sql/`**: SQL scripts for database setup and queries.
+- **`utils/`**: Helper functions and utilities.
+- **`main.py`**: The main entry point of the application.
+- **`requirements.txt`**: Lists all Python dependencies.
 
 ## Getting Started
 
 ### Prerequisites
 
-* Python 3.8 or higher (3.8-3.11 recommended)
-* MySQL
-* Apache Spark
+- Python 3.8 or higher (3.8-3.11 recommended)
+- MySQL
+- Apache Spark
 
 ### Installation
 
@@ -34,8 +34,6 @@ This Capstone Project is designed to manage an ETL process for a bank dataset. T
    cd Capstone
    ```
 
-
-
 2. **Create and activate a virtual environment (optional but recommended):**
 
    ```bash
@@ -43,25 +41,19 @@ This Capstone Project is designed to manage an ETL process for a bank dataset. T
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-
-
 3. **Install the required dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-
-
 ## Usage
 
 To run the main application:
 
 ```bash
-python main.py
+spark-submit main.py
 ```
-
-
 
 Before running on your local machine, update the config.json file to match your MySQL and PySpark configurations
 
