@@ -1,11 +1,14 @@
+# Set of file extenstions that are supported for ETL processes
+SUPPORTED_EXTENSIONS = {".json", ".csv"}
+
+# Path to the MySQL jdbc jar file
+MYSQL_JAR_PATH = r"./lib/mysql-connector-j-9.3.0.jar"
+
 # API url for the loan dataset
 LOAN_API_URL = (
     r"https://raw.githubusercontent.com/platformps/"
     r"LoanDataset/main/loan_data.json"
 )
-
-# Set of file extenstions that are supported for ETL processes
-SUPPORTED_EXTENSIONS = {".json", ".csv"}
 
 # Regex patterns for input validation by input type
 VALIDATIONS = {

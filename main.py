@@ -9,6 +9,7 @@ from pyspark.sql import SparkSession
 from utils.sql import SafeSQL
 from app.menu import CLIManager
 from app.data_client import DataClient
+from config.constants import MYSQL_JAR_PATH
 
 
 class Application:
@@ -35,7 +36,7 @@ class Application:
         # Create the SparkSession
         self.spark = SparkSession.builder \
             .appName(app_name) \
-            .config("spark.jars", os.getenv('MYSQL_JAR')) \
+            .config("spark.jars", MYSQL_JAR_PATH) \
             .config("spark.driver.bindAddress", "127.0.0.1") \
             .config("spark.driver.host", "127.0.0.1") \
             .config("spark.driver.port", "4041") \
