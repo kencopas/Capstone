@@ -69,6 +69,10 @@ class DataClient:
         for name, df in df_map.items():
             self.mysql_write(name, df)
 
+        # Write each newly populated MySQL table to a csv file
+        for name in df_map.keys():
+            self.sql.to_csv(name, f"data/tableau/{name}.csv")
+
     # Parses cli_script.sql file and runs the specified paramaterized query
     def query(self, flag: str, params: tuple) -> None:
 

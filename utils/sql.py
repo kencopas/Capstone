@@ -1,8 +1,11 @@
 from collections.abc import Iterable
+import csv
 
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector.types import RowType
+
+from utils.logging import path_log
 
 
 # Safe connection and cursor querying
@@ -60,6 +63,17 @@ class SafeSQL:
 
         # Return unpacked data
         return data
+
+    # Writes a MySQL table to a csv file
+    def to_csv(self, table: str, filepath: str) -> None:
+        stuff = self.run(f"SELECT * FROM {table};")
+
+        with open(filepath, mode='w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(stuff.pop(0))
+            writer.writerows(stuff)
+
+        path_log(f"{table} table data written to {filepath}")
 
     def run(self, sqlin: str) -> list[RowType] | list[list[RowType]]:
 
