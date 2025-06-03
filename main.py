@@ -29,25 +29,20 @@ class Application:
 
     def __init__(self, app_name: str, *, log: str) -> None:
 
-        # Load the configuration and verify the python version
+        # Load the .env file if it exists
         load_dotenv()
-        # self.verify_version()
+
+        # Retrieve the MySQL configurations from env variables
+        mysql_config = self.mysql_config()
 
         # Create the SparkSession
         self.spark = SparkSession.builder \
             .appName(app_name) \
             .config("spark.jars", MYSQL_JAR_PATH) \
-            .config("spark.driver.bindAddress", "127.0.0.1") \
-            .config("spark.driver.host", "127.0.0.1") \
-            .config("spark.driver.port", "4041") \
-            .config("spark.driver.memory", "4g") \
             .getOrCreate()
 
         # Set the log level
         self.spark.sparkContext.setLogLevel(log.upper())
-
-        # Retrieve the MySQL configurations
-        mysql_config = self.mysql_config()
 
         # Initialize SafeSQL connection
         self.sql = SafeSQL(**mysql_config)
@@ -82,8 +77,9 @@ class Application:
             os.environ[var_name] = val
             config.update({var_name.split('_')[-1].lower(): val})
 
+        # Prompt for port number and construct jdbc url if env varible doesn't exist
         if not os.getenv('JDBC_URL'):
-            port = input("Please enter MySQL port number:")
+            port = input("Please enter MySQL port number: ")
             host = config['host'] if config['host'] != '127.0.0.1' else 'localhost'
             os.environ['JDBC_URL'] = f"jdbc:mysql://{host}:{port}/creditcard_capstone"
 
