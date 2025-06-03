@@ -9,7 +9,7 @@ from pyspark.sql import SparkSession
 from utils.sql import SafeSQL
 from app.menu import CLIManager
 from app.data_client import DataClient
-from config.constants import MYSQL_JAR_PATH
+from config.constants import MYSQL_JAR_PATH, JDBC_URL
 
 
 class Application:
@@ -77,11 +77,16 @@ class Application:
             os.environ[var_name] = val
             config.update({var_name.split('_')[-1].lower(): val})
 
-        # Prompt for port number and construct jdbc url if env varible doesn't exist
+        # If jdbc_url env variable doesn't exist, prompt for port number
         if not os.getenv('JDBC_URL'):
             port = input("Please enter MySQL port number: ")
-            host = config['host'] if config['host'] != '127.0.0.1' else 'localhost'
-            os.environ['JDBC_URL'] = f"jdbc:mysql://{host}:{port}/creditcard_capstone"
+            host = config['host']
+
+            if host == '127.0.0.1':
+                host = 'localhost'
+
+            # Construct the jdbc url with the hostname and port number
+            os.environ['JDBC_URL'] = JDBC_URL.format(host, port)
 
         return config
 

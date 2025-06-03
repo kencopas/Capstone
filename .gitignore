@@ -10,3 +10,4 @@ capstone_project/docs/**/*.docx
 capstone_project/lib/*.jar
 macconfig.json
 dev
+capstone_ubuntu.pem
