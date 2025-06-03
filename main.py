@@ -86,7 +86,7 @@ class Application:
                 host = 'localhost'
 
             # Construct the jdbc url with the hostname and port number
-            os.environ['JDBC_URL'] = JDBC_URL.format(host, port)
+            os.environ['JDBC_URL'] = JDBC_URL.format(hostname=host, port=port)
 
         return config
 

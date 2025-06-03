@@ -8,7 +8,7 @@ MYSQL_JAR_PATH = r"./lib/mysql-connector-j-9.3.0.jar"
 JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"
 
 # Url for MySQL jdbc connector, hostname and port placeholders
-JDBC_URL = "jdbc:mysql://{}:{}/creditcard_capstone"
+JDBC_URL = "jdbc:mysql://{hostname}:{port}/creditcard_capstone"
 
 # API url for the loan dataset
 LOAN_API_URL = (
