@@ -62,7 +62,7 @@ class Application:
         required_vars = {
             'MYSQL_USER': 'MySQL username',
             'MYSQL_PASSWORD': 'MySQL password',
-            'MYSQL_HOST': 'MySQL hostname'
+            'MYSQL_HOST': 'MySQL hostname (X.X.X.X)'
         }
 
         # Initialize config dict
