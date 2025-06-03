@@ -39,6 +39,7 @@ class Application:
             .config("spark.driver.bindAddress", "127.0.0.1") \
             .config("spark.driver.host", "127.0.0.1") \
             .config("spark.driver.port", "4041") \
+            .config("spark.driver.memory", "4g") \
             .getOrCreate()
 
         # Set the log level

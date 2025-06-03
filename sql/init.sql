@@ -1,5 +1,7 @@
 -- FR 1.2a
 -- Create and use creditcard_capstone database
+DROP DATABASE IF EXISTS creditcard_capstone;
+
 CREATE DATABASE IF NOT EXISTS creditcard_capstone;
 
 USE creditcard_capstone;

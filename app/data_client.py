@@ -43,6 +43,14 @@ class DataClient:
         if query_output[-1]:
             return
 
+        # Fetch the loan api and save the data
+        response = requests.get(LOAN_API_URL)
+        loan_data = response.json()
+
+        # Write the loan application data to a local json file
+        with open('data/cdw_sapp_loan_application.json', 'w') as f:
+            json.dump(loan_data, f)
+
         # Gather all data files of the supported file extensions
         data_files = [
             file
@@ -56,12 +64,6 @@ class DataClient:
         # For each DataFrame, retrieve and call the corresponding transformer
         for filename, df in df_map.items():
             df_map[filename] = transform(filename, df)
-
-        # Make a get request to the loan endpoint and save as DataFrame
-        loan_df = self.get(LOAN_API_URL)
-
-        # Add the loan DataFrame to the df_map
-        df_map.update({'cdw_sapp_loan_application': loan_df})
 
         # Write each DataFrame to the mysql table that matches the filename
         for name, df in df_map.items():
@@ -91,19 +93,6 @@ class DataClient:
         data = SafeSQL.unpacked(data, remove_empty=True)
 
         return data
-
-    # Retrieve JSON from an api endpoint and return it as a DataFrame
-    def get(self, api: str) -> DataFrame:
-
-        # Ping the api and save the json response
-        response = requests.get(api)
-        data = response.json()
-
-        # Convert JSON data to RDD and create DataFrame from RDD
-        rdd = self.spark.sparkContext.parallelize([json.dumps(data)])
-        df = self.spark.read.json(rdd)
-
-        return df
 
     # Safely read data from a json file or python object into a dataframe
     def file_to_df(self, fp: str) -> DataFrame:

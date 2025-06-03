@@ -114,7 +114,7 @@ def transform(filename: str, df: DataFrame) -> DataFrame:
 
     try:
         # Retrieve the correct transformer function
-        transformer_function = transformers_map.get(filename)
+        transformer_function = transformers_map.get(filename, lambda x: x)
 
         # Call the transformer function on the DataFrame and return the output
         return transformer_function(df)
