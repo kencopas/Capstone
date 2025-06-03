@@ -46,12 +46,11 @@ class Application:
         # Set the log level
         self.spark.sparkContext.setLogLevel(log.upper())
 
+        # Retrieve the MySQL configurations
+        mysql_config = self.mysql_config()
+
         # Initialize SafeSQL connection
-        self.sql = SafeSQL(
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD"),
-            host=os.getenv("MYSQL_HOST")
-        )
+        self.sql = SafeSQL(**mysql_config)
 
         # Initialize the DataClient and run the pipeline
         self.dc = DataClient(self.spark, self.sql)
@@ -60,6 +59,35 @@ class Application:
         # Initialize and run the CLIManager
         self.cli = CLIManager(self.dc)
         self.cli.run()
+
+    # Prompts the user for MySQL username and password if not provided
+    def mysql_config(self) -> dict[str: str]:
+
+        # Required environment variables for MySQL configuration
+        required_vars = {
+            'MYSQL_USER': 'MySQL username',
+            'MYSQL_PASSWORD': 'MySQL password',
+            'MYSQL_HOST': 'MySQL hostname'
+        }
+
+        # Initialize config dict
+        config = {}
+
+        # For each variable, prompt for the value if necessary
+        for var_name in required_vars.keys():
+            if os.getenv(var_name):
+                val = os.getenv(var_name)
+            else:
+                val = input(f"Please enter {required_vars[var_name]}: ")
+            os.environ[var_name] = val
+            config.update({var_name.split('_')[-1].lower(): val})
+
+        if not os.getenv('JDBC_URL'):
+            port = input("Please enter MySQL port number:")
+            host = config['host'] if config['host'] != '127.0.0.1' else 'localhost'
+            os.environ['JDBC_URL'] = f"jdbc:mysql://{host}:{port}/creditcard_capstone"
+
+        return config
 
     # Print a warning if the python version being run is not 3.8-3.11
     def verify_version(self) -> None:

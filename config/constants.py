@@ -4,6 +4,9 @@ SUPPORTED_EXTENSIONS = {".json", ".csv"}
 # Path to the MySQL jdbc jar file
 MYSQL_JAR_PATH = r"./lib/mysql-connector-j-9.3.0.jar"
 
+# Spark-MySQL jdbc connector driver
+JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"
+
 # API url for the loan dataset
 LOAN_API_URL = (
     r"https://raw.githubusercontent.com/platformps/"

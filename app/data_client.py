@@ -7,7 +7,7 @@ import requests
 from pyspark.sql import SparkSession, DataFrame
 from utils.sql import SafeSQL
 
-from config.constants import LOAN_API_URL, SUPPORTED_EXTENSIONS
+from config.constants import LOAN_API_URL, SUPPORTED_EXTENSIONS, JDBC_DRIVER
 from utils.transformers import transform
 from utils.logging import path_log
 
@@ -141,7 +141,7 @@ class DataClient:
             df.write \
                 .format("jdbc") \
                 .option("url", os.getenv('JDBC_URL')) \
-                .option("driver", os.getenv('JDBC_DRIVER')) \
+                .option("driver", JDBC_DRIVER) \
                 .option("dbtable", table) \
                 .option("user", os.getenv('MYSQL_USER')) \
                 .option("password", os.getenv('MYSQL_PASSWORD')) \
