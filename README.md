@@ -52,7 +52,7 @@ This Capstone Project is designed to manage an ETL process for a bank dataset. T
 To run the main application:
 
 ```bash
-spark-submit main.py
+python main.py
 ```
 
 Before running on your local machine, update the config.json file to match your MySQL and PySpark configurations
