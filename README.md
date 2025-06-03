@@ -55,7 +55,16 @@ To run the main application:
 python main.py
 ```
 
-Before running on your local machine, update the config.json file to match your MySQL and PySpark configurations
+Upon running, you will be prompted for MySQL configurations. To circumvent this for frequent reuse, create a .env file in the root of the repository in this format:
+
+'''env
+JDBC_URL=jdbc:mysql://<hostname>:<port>/creditcard_capstone
+MYSQL_USER=<username>
+MYSQL_PASSWORD=<password>
+MYSQL_HOST=<host ip>
+'''
+
+If using localhost as I would recommend, use 'localhost' as the hostname in the jdbc url, and 127.0.0.1 in the MySQL host. Any other ip should be referenced in the latter format for both.
 
 ## Contributing
 
