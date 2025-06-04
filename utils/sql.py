@@ -66,6 +66,7 @@ class SafeSQL:
 
     # Writes a MySQL table to a csv file
     def to_csv(self, table: str, filepath: str) -> None:
+        
         stuff = self.run(f"SELECT * FROM {table};")
 
         with open(filepath, mode='w', newline='', encoding='utf-8') as f:

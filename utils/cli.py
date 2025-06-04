@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from getpass import getpass
 
 
 def valid_date(format: str, user_input: str):
@@ -73,7 +74,7 @@ class CLIComponent:
         return options[keys[int(ans)]]
 
     @staticmethod
-    def prompt_user(text: str, constraints: dict) -> str:
+    def prompt_user(text: str, constraints: dict, private: bool = False) -> str:
 
         """Prompt the user for input and validate against constraints.
 
@@ -92,7 +93,10 @@ class CLIComponent:
             str: Validated user input as a string.
         """
 
-        ans = input(f"{text}\n")
+        # Prompt with getpass if private otherwise use input
+        prompter = getpass if private else input
+
+        ans = prompter(f"{text}\n")
 
         # Prompt the user until input is valid
         while True:
@@ -133,7 +137,7 @@ class CLIComponent:
             else:
                 break
 
-            ans = input(f"\nInvalid Input.\n\n{text}\n")
+            ans = prompter(f"\nInvalid Input.\n\n{text}\n")
 
         return ans
 
@@ -254,6 +258,7 @@ class UserInput(CLIComponent):
         self.id = id
         self.prompt = prompt
         self.constraints = constraints
+        self.private_prompt = constraints.get('private', False)
 
     # Prompts the user for input, validating with properties
     def run(self) -> dict[str: any]:
@@ -262,5 +267,5 @@ class UserInput(CLIComponent):
         Returns:
             dict[str, any]: Dictionary mapping this component's ID to value.
         """
-        ans = self.prompt_user(self.prompt, self.constraints)
+        ans = self.prompt_user(self.prompt, self.constraints, self.private_prompt)
         return {self.id: ans}

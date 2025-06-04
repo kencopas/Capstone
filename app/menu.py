@@ -143,7 +143,8 @@ class CLIManager:
             UserInput(
                 id='SSN',
                 prompt="Please enter the Social Security Number (9 digits): ",
-                regex=VALIDATIONS['SSN']
+                regex=VALIDATIONS['SSN'],
+                private=True
             ),
             id='view_account',
             pass_values=self.view_account
@@ -155,7 +156,8 @@ class CLIManager:
             UserInput(
                 id='SSN',
                 prompt="Please enter the Social Security Number (9 digits): ",
-                regex=VALIDATIONS['SSN']
+                regex=VALIDATIONS['SSN'],
+                private=True
             ),
             MultipleChoice(
                 id='modify_attribute',
@@ -179,7 +181,8 @@ class CLIManager:
                     "Credit Card Number": UserInput(
                         id="CREDIT_CARD_NO",
                         prompt="Please enter the new value (16 digits): ",
-                        regex=VALIDATIONS['CCN']
+                        regex=VALIDATIONS['CCN'],
+                        private=True
                     ),
                     "Street Address": UserInput(
                         id="FULL_STREET_ADDRESS",
@@ -228,7 +231,8 @@ class CLIManager:
             UserInput(
                 id="CCN",
                 prompt="Please enter the credit card number: ",
-                regex=VALIDATIONS['CCN']
+                regex=VALIDATIONS['CCN'],
+                private=True
             ),
             UserInput(
                 id="date",
@@ -246,7 +250,8 @@ class CLIManager:
             UserInput(
                 id='SSN',
                 prompt="Please enter the Social Security Number (9 digits): ",
-                regex=VALIDATIONS['SSN']
+                regex=VALIDATIONS['SSN'],
+                private=True
             ),
             UserInput(
                 id="start_date",
