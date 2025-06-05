@@ -9,5 +9,5 @@ venv
 capstone_project/docs/**/*.docx
 capstone_project/lib/*.jar
 macconfig.json
-dev
+dev/*
 capstone_ubuntu.pem
