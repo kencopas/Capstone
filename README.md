@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Capstone Project is designed to manage an ETL process for a bank dataset. The main components of this application are an ETL Pipeline, Command Line Interface, and [Tableau Dashboard](https://public.tableau.com/views/CustomerDataDashboard_17484417707510/CustomerDataDashboard?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
+This Capstone Project is designed to manage an ETL process for a bank dataset. The main components of this application are an ETL Pipeline, Command Line Interface, and Tableau Dashboards ([Customer Data](https://public.tableau.com/views/CustomerDataDashboard_17484417707510/CustomerDataDashboard?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link), [Loan Application](https://public.tableau.com/views/LoanApplicationDashboard_17491312226230/LoanApplicationDashboard?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link))
 
 ## Repository Structure
 
