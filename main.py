@@ -46,7 +46,7 @@ class Application:
         self.spark.sparkContext.setLogLevel(log.upper())
 
         # Initialize SafeSQL connection
-        self.sql = SafeSQL(**mysql_config)
+        self.mysql_connect(mysql_config)
 
         # Initialize the DataClient and run the pipeline
         self.dc = DataClient(self.spark, self.sql)
@@ -55,6 +55,18 @@ class Application:
         # Initialize and run the CLIManager
         self.cli = CLIManager(self.dc)
         self.cli.run()
+
+    def mysql_connect(self, config):
+        while True:
+            try:
+                self.sql = SafeSQL(**config)
+                break
+            except Exception:
+                print(
+                    "Failed to connect to MySQL with the following configurations:\n\n"
+                    f"Username: {config['user']}\n"
+                    f"JDBC url: {os.getenv['JDBC_URL']}\n\n"
+                )
 
     # Prompts the user for MySQL username and password if not provided
     def get_config(self) -> dict[str: str]:
