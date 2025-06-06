@@ -1,5 +1,6 @@
 import os
 import sys
+from getpass import getpass
 
 from dotenv import load_dotenv
 import findspark
@@ -33,7 +34,7 @@ class Application:
         load_dotenv()
 
         # Retrieve the MySQL configurations from env variables
-        mysql_config = self.mysql_config()
+        mysql_config = self.get_config()
 
         # Create the SparkSession
         self.spark = SparkSession.builder \
@@ -56,7 +57,7 @@ class Application:
         self.cli.run()
 
     # Prompts the user for MySQL username and password if not provided
-    def mysql_config(self) -> dict[str: str]:
+    def get_config(self) -> dict[str: str]:
 
         # Required environment variables for MySQL configuration
         required_vars = {
@@ -73,13 +74,13 @@ class Application:
             if os.getenv(var_name):
                 val = os.getenv(var_name)
             else:
-                val = input(f"Please enter {required_vars[var_name]}: ")
+                val = getpass(f"Please enter {required_vars[var_name]}: ")
             os.environ[var_name] = val
             config.update({var_name.split('_')[-1].lower(): val})
 
         # If jdbc_url env variable doesn't exist, prompt for port number
         if not os.getenv('JDBC_URL'):
-            port = input("Please enter MySQL port number: ")
+            port = getpass("Please enter MySQL port number: ")
             host = config['host']
 
             if host == '127.0.0.1':
