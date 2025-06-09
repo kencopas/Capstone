@@ -26,7 +26,7 @@ class CLIManager:
         cust_zip = values['zip']
         mm, yyyy = values['date'].split('-')
 
-        self.cli_params = ("VIEW_TRANSACTIONS", (cust_zip, f'{yyyy}{mm}'))
+        self.cli_params = ("VIEW_TRANSACTIONS", (cust_zip, f'{yyyy}{mm}%'))
 
     # View account details
     def view_account(self, values: tuple):
@@ -41,7 +41,7 @@ class CLIManager:
         SSN = values['SSN']
         attr, new_val = next(iter(values['modify_attribute'].items()))
 
-        self.cli_params = ("MODIFY_ACCOUNT", (attr, new_val, SSN, SSN))
+        self.cli_params = ("MODIFY_ACCOUNT", ((attr, new_val, SSN), (SSN,)))
 
     # Generate a monthly bill by CCN
     def generate_bill(self, values: tuple):
