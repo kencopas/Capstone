@@ -90,9 +90,6 @@ class DataClient:
             params=params
         )
 
-        # Commit the query to the database
-        self.sql.commit()
-
         # Unpack the data, removing empty iterables
         data = SafeSQL.unpacked(data, remove_empty=True)
 

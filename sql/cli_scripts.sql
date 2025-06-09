@@ -15,8 +15,8 @@ LEFT JOIN
 ON
     cc.cust_ssn = cust.ssn
 WHERE
-    cust.cust_zip = {}
-    AND cc.timeid LIKE '{}%';
+    cust.cust_zip = %s
+    AND cc.timeid LIKE %s;
 
 -- %%VIEW_ACCOUNT%%
 -- Query the customer data matching the SSN
@@ -37,16 +37,16 @@ SELECT
 FROM
     cdw_sapp_customer
 WHERE
-    ssn = {};
+    ssn = %s;
 
 -- %%MODIFY_ACCOUNT%%
 -- Update the value
 UPDATE
     cdw_sapp_customer
 SET
-    {} = '{}'
+    {} = %s
 WHERE
-    ssn = {};
+    ssn = %s;
 
 -- Query the updated row
 SELECT
@@ -66,7 +66,7 @@ SELECT
 FROM
     cdw_sapp_customer
 WHERE
-    ssn = {};
+    ssn = %s;
 
 -- %%GENERATE_BILL%%
 -- Select the transaction details for a credit card number during a specified year and month
@@ -77,8 +77,8 @@ SELECT
 FROM
     cdw_sapp_credit_card
 WHERE
-    cust_cc_no = {}
-    AND timeid LIKE '{}%';
+    cust_cc_no = %s
+    AND timeid LIKE %s;
 
 -- %%TRANSACTIONS_TIMEFRAME%%
 -- Select the transaction info for a customers transactions in a timeframe
@@ -91,6 +91,6 @@ SELECT
 FROM
     cdw_sapp_credit_card
 WHERE
-    cust_ssn = {}
-    AND timeid >= {}
-    AND timeid <= {};
+    cust_ssn = %s
+    AND timeid >= %s
+    AND timeid <= %s;
