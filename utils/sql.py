@@ -76,7 +76,7 @@ class SafeSQL:
 
         path_log(f"{table} table data written to {filepath}")
 
-    def run(self, sqlin: str) -> list[RowType] | list[list[RowType]]:
+    def run(self, sqlin: str, params: tuple = None, cols: tuple = None) -> list[RowType] | list[list[RowType]]:
 
         """
         Safe query function, takes an sql script as text or a filepath,
@@ -100,24 +100,62 @@ class SafeSQL:
             # Split potential multiquery into single queries by semicolon
             query_arr = [q.strip() for q in content.split(';') if q.strip()]
 
+            # Remove all comments
+            while all(line.strip().startswith('--') for line in query_arr[-1].splitlines()):
+                query_arr.pop()
+
+            # ((attr, new_val, SSN), (SSN,))
+            print(f"Params: {params}")
+            print(f"Columns: {cols}")
+
+            # Wrap the parameters
+            if params and ((not isinstance(params[0], Iterable)) or isinstance(params[0], str)):
+                params = [params]
+                if len(params) < len(query_arr):
+                    params += [None] * (len(query_arr) - len(params))
+
+            if not params:
+                params = [None] * len(query_arr)
+
+            # Wrap the columns
+            if cols and not isinstance(cols[0], Iterable) and not isinstance(cols[0], str):
+                cols = [cols]
+                if len(cols) < len(query_arr):
+                    cols += [None] * (len(query_arr) - len(cols))
+
+            if not cols:
+                cols = [None] * len(query_arr)
+
+            print(f"Params: {params}")
+            print(f"Columns: {cols}")
+
             # Run each query and append the result to the outputs
-            for query in query_arr:
+            for query, params, cols in zip(query_arr, params, cols):
+
+                if cols:
+                    query = query.format(*cols)
 
                 # Execute query and increment query and row count
-                self.cursor.execute(query)
+                if params:
+                    print(f"Params: {params}")
+                    self.cursor.execute(query, params)
+                else:
+                    self.cursor.execute(query)
                 self.query_count += 1
                 rowcount += self.cursor.rowcount
 
                 # Fetch all the returned rows
-                output = self.cursor.fetchall()
+                if self.cursor.with_rows:
+                    output = self.cursor.fetchall()
 
-                # Retrieve the column names and insert them into the output
-                if self.cursor.description and output:
-                    col_names = [desc[0] for desc in self.cursor.description]
-                    output.insert(0, col_names)
+                    # Retrieve the column names and insert them into the output
+                    if self.cursor.description and output:
+                        col_names = [desc[0] for desc in self.cursor.description]
+                        output.insert(0, col_names)
 
-                # Append the query results to outputs
-                outputs.append(output)
+                    outputs.append(output)
+                else:
+                    outputs.append(None)
 
             self.verbose and print(
                 f"Executed {len(query_arr)} queries."
@@ -155,13 +193,7 @@ class SafeSQL:
         # Reset error and query counters
         self.error_count, self.query_count = 0, 0
 
-    def parse_file(
-        self,
-        fp: str,
-        *,
-        flag: str,
-        params: tuple
-    ):
+    def parse_file(self, fp: str, *, flag: str, params: tuple, cols: tuple = None):
 
         """
         The parse_file method takes a filepath, flag, and parameters. The file
@@ -176,21 +208,19 @@ class SafeSQL:
             with open(fp, 'r') as f:
                 contents = f.read()
 
-            # Split the file contents by the delimiter
+            # Split the file contents by the delimiter and find the script
             scripts = contents.split(r'%%')
             index = scripts.index(flag)
+            script = scripts[index+1]
 
-            # Get the target script and split by parameter flag
-            script = scripts[index+1].split(r'{}')
+            # Run the parameterized script
+            output = self.run(script, params, cols)
 
-            # Join the script back together inserting the parameters
-            full_script = ''.join([
-                line+str(param)
-                for line, param in zip(script, params+('',))
-            ])
+            # Only commit the query if it was not a select query
+            if not self.cursor.with_rows:
+                self.cursor.commit()
 
-            # Run the script and return the results
-            return self.run(full_script)
+            return output
 
         except Exception as e:
             print(f"Error parsing sql script:\n{e}")
